@@ -30,12 +30,11 @@ uint64_t bisectSearch(uint64_t b, long double *bestPi)
 {
     uint64_t aLeft = 3*b;
     uint64_t aRight = 4*b;
-    uint64_t a;
+    uint64_t a = (aLeft + aRight) / 2;
     uint64_t best_a = 0;
     int count = 0;
-    while ((aRight - aLeft) > 2) {
+    while (a != aLeft) {
         // printf("Iteration: %d\n", count++); 
-        a = (aLeft + aRight) / 2;
         long double current_pi = ((long double)(a)) / b;
         if (best_a == 0) {
             best_a = a;
@@ -58,6 +57,7 @@ uint64_t bisectSearch(uint64_t b, long double *bestPi)
             *bestPi = current_pi;
             return best_a;
         }
+        a = (aLeft + aRight) / 2;
     }
     return best_a;
 }
@@ -76,7 +76,7 @@ int main(int argc, char const *argv[])
     {
         uint64_t low = 3*b;
         uint64_t high = 4*b;
-        
+
         for(uint64_t a = low; a < high; a++)
         {
             long double current_ratio = ((long double)(a)) / b;
@@ -90,7 +90,7 @@ int main(int argc, char const *argv[])
             }
         }
     }
-#else 
+#else
     for(uint64_t b = 1; b < 100000; b++)
     {
         long double current_ratio = 0.0;
@@ -103,6 +103,7 @@ int main(int argc, char const *argv[])
             printf("Found better approximation %ld / %ld, E = %Le\n", a, b,
                 fabsl(M_PIl - current_ratio));
         }
+        // break;
     }
 #endif
     return 0;
